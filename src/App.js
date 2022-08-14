@@ -1,51 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import "./App.css";
+import Menu from "./components/Menu";
+import Quiz from "./components/Quiz";
+import QuizScore from "./components/QuizScore";
+import { QuizContext } from "./QuizContext";
 
 const App = () => {
-  const [time, setTime] = useState(0);
-  const [timerOn, setTimerOn] = useState(false);
-
-  useEffect(() => {
-    let interval = null;
-    if (timerOn) {
-      interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
-      }, 10);
-    } else {
-      clearInterval(interval);
-    }
-  }, [timerOn]);
-
+  const [gameStatus, setGameStatus] = useState("menu");
+  const [score, setScore] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [rightAnswer, setRightAnswer] = useState("");
   return (
-    <div>
-      <h1>{time}</h1>
-      <button
-        onClick={() => {
-          setTimerOn(true);
-        }}
-      >
-        start
-      </button>
-      <button
-        onClick={() => {
-          setTimerOn(false);
-        }}
-      >
-        stop
-      </button>
-      <button
-        onClick={() => {
-          setTimerOn(true);
-        }}
-      >
-        resume
-      </button>
-      <button
-        onClick={() => {
-          setTime(0);
-        }}
-      >
-        clear
-      </button>
+    <div className="App">
+      <div className="wrapper">
+        <QuizContext.Provider
+          value={{
+            gameStatus,
+            setGameStatus,
+            score,
+            setScore,
+            currentQuestion,
+            setCurrentQuestion,
+            rightAnswer,
+            setRightAnswer,
+          }}
+        >
+          {gameStatus === "menu" && <Menu />}
+          {gameStatus === "quiz" && <Quiz />}
+          {gameStatus === "score" && <QuizScore />}
+        </QuizContext.Provider>
+      </div>
     </div>
   );
 };
